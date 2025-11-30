@@ -43,9 +43,13 @@ def read_sightings(
     db: Session = Depends(deps.get_db),
     skip: int = 0,
     limit: int = 100,
+    plateNumber: str = None,
 ) -> Any:
     """
     Retrieve sightings.
     """
-    sightings = db.query(models.Sighting).offset(skip).limit(limit).all()
+    query = db.query(models.Sighting)
+    if plateNumber:
+        query = query.filter(models.Sighting.plate_number.ilike(f"%{plateNumber}%"))
+    sightings = query.offset(skip).limit(limit).all()
     return sightings
