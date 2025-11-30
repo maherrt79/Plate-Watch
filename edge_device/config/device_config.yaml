@@ -1,0 +1,7 @@
+locationId: "LOC-LOCAL-001"
+apiEndpoint: "http://localhost:8000/api/v1"
+apiKey: "dev-api-key-123"
+cameraSource: "test_video.mp4" # Path to local video file
+storageDirectory: "./data/images"
+logDirectory: "./logs"
+simulationMode: true
