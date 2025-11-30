@@ -10,6 +10,8 @@ class MockVideoProcessor:
         self.config = config
         self.cloud_client = cloud_client
         self.location_id = config['locationId']
+        self.mock_plates = config.get('mockPlates', [])
+        self.mock_locations = config.get('mockLocations', [])
         self.running = False
 
     def start(self):
@@ -29,16 +31,25 @@ class MockVideoProcessor:
         logger.info("Stopping Mock Video Processor...")
 
     def _trigger_mock_sighting(self):
-        plate = self._generate_random_plate()
+        if self.mock_plates:
+            plate = random.choice(self.mock_plates)
+        else:
+            plate = self._generate_random_plate()
+            
+        if self.mock_locations:
+            location = random.choice(self.mock_locations)
+        else:
+            location = self.location_id
+            
         timestamp = datetime.utcnow().isoformat() + "Z"
         
         payload = {
             "plateNumber": plate,
             "timestamp": timestamp,
-            "locationId": self.location_id
+            "locationId": location
         }
         
-        logger.info(f"Mock Sighting Detected: {plate}")
+        logger.info(f"Mock Sighting Detected: {plate} at {location}")
         self.cloud_client.send_sighting(payload)
 
     def _generate_random_plate(self):

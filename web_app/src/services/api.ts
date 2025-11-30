@@ -10,7 +10,12 @@ export const api = axios.create({
     }
 });
 
-export const getSightings = async (params?: { plateNumber?: string }): Promise<Sighting[]> => {
+export const getSightings = async (params?: {
+    plateNumber?: string;
+    locationId?: string;
+    startDate?: string;
+    endDate?: string;
+}): Promise<Sighting[]> => {
     const response = await api.get<Sighting[]>('/sightings', {
         params,
         headers: { 'x-api-key': 'dev-api-key-123' }

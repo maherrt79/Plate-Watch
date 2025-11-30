@@ -5,3 +5,13 @@ cameraSource: "test_video.mp4" # Path to local video file
 storageDirectory: "./data/images"
 logDirectory: "./logs"
 simulationMode: true
+mockPlates:
+  - "ABC-123"
+  - "XYZ-789"
+  - "LZA-934"
+  - "TRX-713"
+  - "OGE-324"
+mockLocations:
+  - "LOC-LOCAL-001"
+  - "LOC-NORTH-GATE"
+  - "LOC-SOUTH-EXIT"

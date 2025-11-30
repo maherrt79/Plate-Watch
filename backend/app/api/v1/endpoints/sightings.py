@@ -1,4 +1,5 @@
-from typing import List, Any
+from datetime import datetime
+from typing import List, Any, Optional
 from fastapi import APIRouter, Depends, HTTPException, Header
 from sqlalchemy.orm import Session
 
@@ -43,13 +44,27 @@ def read_sightings(
     db: Session = Depends(deps.get_db),
     skip: int = 0,
     limit: int = 100,
-    plateNumber: str = None,
+    plateNumber: Optional[str] = None,
+    locationId: Optional[str] = None,
+    startDate: Optional[datetime] = None,
+    endDate: Optional[datetime] = None,
 ) -> Any:
     """
     Retrieve sightings.
     """
     query = db.query(models.Sighting)
+    
     if plateNumber:
         query = query.filter(models.Sighting.plate_number.ilike(f"%{plateNumber}%"))
-    sightings = query.offset(skip).limit(limit).all()
+    
+    if locationId:
+        query = query.filter(models.Sighting.location_id == locationId)
+        
+    if startDate:
+        query = query.filter(models.Sighting.timestamp >= startDate)
+        
+    if endDate:
+        query = query.filter(models.Sighting.timestamp <= endDate)
+        
+    sightings = query.order_by(models.Sighting.timestamp.desc()).offset(skip).limit(limit).all()
     return sightings

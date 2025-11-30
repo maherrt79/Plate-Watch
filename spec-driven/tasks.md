@@ -15,46 +15,46 @@ The tasks are organized to enable parallel development where possible:
 
 ### Phase 1: Local Development Foundation
 
-- [ ] **L1. Local Environment Setup**
-  - [ ] L1.1 Create `docker-compose.yml`
+- [x] **L1. Local Environment Setup**
+  - [x] L1.1 Create `docker-compose.yml`
     - Define `db` service (PostgreSQL 14)
     - Define `backend` service (FastAPI)
     - Define `adminer` service (Database GUI)
     - Configure networking and volumes
-  - [ ] L1.2 Configure Local Environment Variables
+  - [x] L1.2 Configure Local Environment Variables
     - Create `.env.example` and `.env`
     - Set DB credentials, API URLs, and "Dev Auth" flags
 
-- [ ] **L2. Cloud Backend (Local)**
-  - [ ] L2.1 Initialize FastAPI Project
+- [x] **L2. Cloud Backend (Local)**
+  - [x] L2.1 Initialize FastAPI Project
     - Set up `app/` structure
     - Configure SQLAlchemy for local Postgres
-  - [ ] L2.2 Implement Core Models & Schemas
+  - [x] L2.2 Implement Core Models & Schemas
     - `Sighting` model and migration
     - `Device` model and migration
-  - [ ] L2.3 Implement Ingestion API
+  - [x] L2.3 Implement Ingestion API
     - `POST /api/v1/sightings`
     - Mock API Key validation for local dev
-  - [ ] L2.4 Implement Query API
+  - [x] L2.4 Implement Query API
     - `GET /api/v1/sightings`
     - Mock User Auth for local dev
 
 - [ ] **L3. Web Application (Local)**
-  - [ ] L3.1 Initialize React + Vite Project
-  - [ ] L3.2 Implement Sightings Dashboard
+  - [x] L3.1 Initialize React + Vite Project
+  - [x] L3.2 Implement Sightings Dashboard
     - Connect to `http://localhost:8000`
     - Display sightings list
   - [ ] L3.3 Implement Search & Filter
-    - Plate search input
-    - Date/Location filters
+    - [x] Plate search input
+    - [ ] Date/Location filters
 
-- [ ] **L4. Edge Device (Local Simulation)**
-  - [ ] L4.1 Initialize Python Edge Project
-  - [ ] L4.2 Implement Video Processor
+- [x] **L4. Edge Device (Local Simulation)**
+  - [x] L4.1 Initialize Python Edge Project
+  - [x] L4.2 Implement Video Processor
     - Support reading from video file source
-  - [ ] L4.3 Implement Mock AI Pipeline
+  - [x] L4.3 Implement Mock AI Pipeline
     - Option to use pre-recorded detections (for faster dev) OR actual YOLO/OCR
-  - [ ] L4.4 Implement API Client
+  - [x] L4.4 Implement API Client
     - Send data to `http://localhost:8000`
 
 ### Phase 2: Cloud Migration (Original Tasks)
