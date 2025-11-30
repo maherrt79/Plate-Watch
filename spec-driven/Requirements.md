@@ -124,21 +124,6 @@ The Plate-Watch system is an end-to-end vehicle monitoring solution that combine
 
 **\#\#\# Requirement 9: Cloud Backend Data Storage and Indexing**
 
-\*\*User Story:\*\* As a data analyst, I want vehicle sighting data to be persistently stored with efficient indexing, so that I can query historical records quickly and generate reports.
-
-**\#\#\#\# Acceptance Criteria**
-
-1\. WHEN the Cloud\_Backend successfully validates a Metadata\_Payload, THE Cloud\_Backend SHALL store the sighting record in the sightings table with all required fields  
-2\. THE Cloud\_Backend SHALL assign a unique identifier to each stored sighting record in the id field  
-3\. THE Cloud\_Backend SHALL create a database index on the plateNumber field to enable efficient license plate searches  
-4\. THE Cloud\_Backend SHALL create a database index on the timestamp field to enable efficient time-range queries  
-5\. THE Cloud\_Backend SHALL create a database index on the locationId field to enable efficient location-based queries  
-6\. THE Cloud\_Backend SHALL preserve the original timestamp from the Edge\_Device without modification  
-7\. THE Cloud\_Backend SHALL automatically populate the createdAt field with the server timestamp when the record is inserted
-
-**\#\#\# Requirement 10: Cloud Backend Query API**
-
-\*\*User Story:\*\* As a Web Application developer, I want the Cloud Backend to provide query endpoints, so that users can retrieve sighting data based on various filters.
 
 **\#\#\#\# Acceptance Criteria**
 

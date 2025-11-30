@@ -29,10 +29,25 @@ def create_sighting(
     """
     Create new sighting.
     """
+    # Check if plate is in hotlist
+    is_hot = False
+    hotlist_category = None
+    hotlist_entry = db.query(models.Hotlist).filter(models.Hotlist.plate_number == sighting_in.plateNumber).first()
+    if hotlist_entry:
+        is_hot = True
+        hotlist_category = hotlist_entry.category
+        print(f"ALERT: Hotlist match for {sighting_in.plateNumber} ({hotlist_entry.category})")
+
     sighting = models.Sighting(
         plate_number=sighting_in.plateNumber,
         timestamp=sighting_in.timestamp,
-        location_id=sighting_in.locationId
+        location_id=sighting_in.locationId,
+        is_hot=is_hot,
+        hotlist_category=hotlist_category,
+        vehicle_make=sighting_in.vehicleMake,
+        vehicle_model=sighting_in.vehicleModel,
+        vehicle_color=sighting_in.vehicleColor,
+        direction=sighting_in.direction
     )
     db.add(sighting)
     db.commit()

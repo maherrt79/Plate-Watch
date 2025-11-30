@@ -41,16 +41,45 @@ class MockVideoProcessor:
         else:
             location = self.location_id
             
-        timestamp = datetime.utcnow().isoformat() + "Z"
+        # Simulate MMC (Probabilistic - 80% chance)
+        vehicle_make = None
+        vehicle_model = None
+        vehicle_color = None
         
-        payload = {
+        if random.random() < 0.8:
+            makes = ["Toyota", "Honda", "Ford", "Chevrolet", "BMW", "Mercedes", "Tesla"]
+            models_map = {
+                "Toyota": ["Camry", "Corolla", "RAV4"],
+                "Honda": ["Civic", "Accord", "CR-V"],
+                "Ford": ["F-150", "Mustang", "Explorer"],
+                "Chevrolet": ["Silverado", "Malibu", "Equinox"],
+                "BMW": ["3 Series", "5 Series", "X5"],
+                "Mercedes": ["C-Class", "E-Class", "GLC"],
+                "Tesla": ["Model 3", "Model Y", "Model S"]
+            }
+            colors = ["White", "Black", "Silver", "Gray", "Red", "Blue", "Green"]
+
+            vehicle_make = random.choice(makes)
+            vehicle_model = random.choice(models_map[vehicle_make])
+            vehicle_color = random.choice(colors)
+
+        # Simulate Direction of Travel (Probabilistic - 90% chance)
+        direction = None
+        if random.random() < 0.9:
+            direction = random.choice(["Entering", "Exiting"])
+
+        sighting = {
             "plateNumber": plate,
-            "timestamp": timestamp,
-            "locationId": location
+            "timestamp": datetime.utcnow().isoformat() + "Z",
+            "locationId": location,
+            "vehicleMake": vehicle_make,
+            "vehicleModel": vehicle_model,
+            "vehicleColor": vehicle_color,
+            "direction": direction
         }
         
         logger.info(f"Mock Sighting Detected: {plate} at {location}")
-        self.cloud_client.send_sighting(payload)
+        self.cloud_client.send_sighting(sighting)
 
     def _generate_random_plate(self):
         letters = "".join(random.choices("ABCDEFGHIJKLMNOPQRSTUVWXYZ", k=3))

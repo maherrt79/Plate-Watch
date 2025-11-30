@@ -89,6 +89,9 @@ export const SightingsList: React.FC<SightingsListProps> = ({ plateNumber }) => 
                     <TableHead>
                         <TableRow>
                             <TableCell>Plate Number</TableCell>
+                            <TableCell>Vehicle</TableCell>
+                            <TableCell>Color</TableCell>
+                            <TableCell>Direction</TableCell>
                             <TableCell>Location</TableCell>
                             <TableCell>Timestamp</TableCell>
                             <TableCell>Seen At</TableCell>
@@ -96,9 +99,41 @@ export const SightingsList: React.FC<SightingsListProps> = ({ plateNumber }) => 
                     </TableHead>
                     <TableBody>
                         {sightings?.map((sighting) => (
-                            <TableRow key={sighting.id}>
+                            <TableRow
+                                key={sighting.id}
+                                sx={{
+                                    backgroundColor: sighting.is_hot
+                                        ? (sighting.hotlist_category === 'danger' ? '#ffcdd2' : (sighting.hotlist_category === 'banned' ? '#ffe0b2' : '#e3f2fd'))
+                                        : 'inherit'
+                                }}
+                            >
                                 <TableCell>
-                                    <Chip label={sighting.plate_number} color="primary" variant="outlined" sx={{ fontWeight: 'bold' }} />
+                                    <Chip
+                                        label={sighting.plate_number}
+                                        color={sighting.is_hot ? (sighting.hotlist_category === 'danger' ? "error" : (sighting.hotlist_category === 'banned' ? "warning" : "info")) : "primary"}
+                                        variant={sighting.is_hot ? "filled" : "outlined"}
+                                        sx={{ fontWeight: 'bold' }}
+                                    />
+                                    {sighting.is_hot && (
+                                        <Typography
+                                            variant="caption"
+                                            color={sighting.hotlist_category === 'danger' ? "error" : (sighting.hotlist_category === 'banned' ? "warning.main" : "info.main")}
+                                            sx={{ ml: 1, fontWeight: 'bold' }}
+                                        >
+                                            {sighting.hotlist_category === 'danger' ? 'HOTLIST MATCH' : (sighting.hotlist_category === 'banned' ? 'BANNED VEHICLE' : 'INFO ALERT')}
+                                        </Typography>
+                                    )}
+                                </TableCell>
+                                <TableCell>
+                                    {sighting.vehicle_make && sighting.vehicle_model
+                                        ? `${sighting.vehicle_make} ${sighting.vehicle_model}`
+                                        : 'Unknown'}
+                                </TableCell>
+                                <TableCell>
+                                    {sighting.vehicle_color || 'Unknown'}
+                                </TableCell>
+                                <TableCell>
+                                    {sighting.direction || 'Unknown'}
                                 </TableCell>
                                 <TableCell>{sighting.location_id}</TableCell>
                                 <TableCell>
@@ -111,7 +146,7 @@ export const SightingsList: React.FC<SightingsListProps> = ({ plateNumber }) => 
                         ))}
                         {sightings?.length === 0 && (
                             <TableRow>
-                                <TableCell colSpan={4} align="center">
+                                <TableCell colSpan={7} align="center">
                                     No sightings recorded yet.
                                 </TableCell>
                             </TableRow>

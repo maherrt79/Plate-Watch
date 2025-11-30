@@ -57,7 +57,31 @@ The tasks are organized to enable parallel development where possible:
   - [x] L4.4 Implement API Client
     - Send data to `http://localhost:8000`
 
-### Phase 2: Cloud Migration (Original Tasks)
+### Phase 2: Advanced Features (Local)
+- [x] **A1. Hotlists & Alerts**
+  - [x] A1.1 Backend: Hotlist Model & API
+  - [x] A1.2 Backend: Alerting Logic (Check sighting against hotlist)
+  - [x] A1.3 Frontend: Hotlist Management UI
+  - [x] A1.4 Frontend: Visual Alert on Dashboard
+  - [ ] A1.5 Notification Integrations (SMS/Email)
+
+- [ ] **A2. Advanced AI & Edge Intelligence**
+  - [x] A2.1 Vehicle Attributes (MMC)
+      - [x] Edge: Simulate Make, Model, Color generation
+      - [x] Backend: Update Sighting model & API
+      - [x] Frontend: Display MMC and add filters
+  - [x] A2.2 Direction of Travel
+  - [ ] A2.3 Dwell Time Calculation
+
+- [ ] **A3. Dashboard & Analytics**
+  - [ ] A3.1 Heatmaps (Sighting density)
+  - [ ] A3.2 Convoy Analysis
+  - [ ] A3.3 Origin-Destination Tracking
+
+- [ ] **A4. Operational Improvements**
+  - [ ] A4.1 Fuzzy Search (Partial plate matching)
+
+### Phase 3: Cloud Migration (Original Tasks)
 
 \- [ ] 1\. Set up Cloud Backend project structure and AWS infrastructure  
  \- [ ] 1.1 Initialize FastAPI project structure  
