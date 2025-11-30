@@ -79,7 +79,7 @@ The tasks are organized to enable parallel development where possible:
   - [ ] A3.3 Origin-Destination Tracking
 
 - [ ] **A4. Operational Improvements**
-  - [ ] A4.1 Fuzzy Search (Partial plate matching)
+  - [x] A4.1 Fuzzy Search (Partial plate matching)
 
 ### Phase 3: Cloud Migration (Original Tasks)
 

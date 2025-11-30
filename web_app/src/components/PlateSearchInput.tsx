@@ -29,7 +29,7 @@ export const PlateSearchInput: React.FC<PlateSearchInputProps> = ({ onSearch }) 
         <Paper sx={{ p: 2, mb: 2 }}>
             <TextField
                 fullWidth
-                label="Search License Plate"
+                label="Search License Plate (Partial Match Supported)"
                 variant="outlined"
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
