@@ -6,6 +6,7 @@ import { SightingsList } from './components/SightingsList';
 import { PlateSearchInput } from './components/PlateSearchInput';
 import { HotlistManager } from './components/HotlistManager';
 import LocalPoliceIcon from '@mui/icons-material/LocalPolice';
+import MapDashboard from './pages/MapDashboard';
 
 const queryClient = new QueryClient();
 
@@ -34,12 +35,14 @@ function App() {
                 Plate-Watch Dashboard
               </Typography>
               <Button color="inherit" component={Link} to="/">Dashboard</Button>
+              <Button color="inherit" component={Link} to="/map">Map</Button>
               <Button color="inherit" component={Link} to="/hotlists">Hotlists</Button>
             </Toolbar>
           </AppBar>
           <Container maxWidth="lg" sx={{ mt: 4 }}>
             <Routes>
               <Route path="/" element={<Dashboard />} />
+              <Route path="/map" element={<MapDashboard />} />
               <Route path="/hotlists" element={<HotlistManager />} />
             </Routes>
           </Container>

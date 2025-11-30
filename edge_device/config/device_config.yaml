@@ -12,6 +12,10 @@ mockPlates:
   - "TRX-713"
   - "OGE-324"
 mockLocations:
-  - "LOC-LOCAL-001"
-  - "LOC-NORTH-GATE"
-  - "LOC-SOUTH-EXIT"
+  - "JABLEH_NORTH"
+  - "JABLEH_SOUTH"
+  - "JABLEH_EAST"
+  - "JABLEH_WEST"
+  - "JABLEH_CENTER"
+  - "JABLEH_PORT"
+  - "JABLEH_STADIUM"

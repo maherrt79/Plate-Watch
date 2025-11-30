@@ -74,9 +74,13 @@ The tasks are organized to enable parallel development where possible:
   - [ ] A2.3 Dwell Time Calculation
 
 - [ ] **A3. Dashboard & Analytics**
-  - [ ] A3.1 Heatmaps (Sighting density)
-  - [ ] A3.2 Convoy Analysis
-  - [ ] A3.3 Origin-Destination Tracking
+  - [ ] A3.1 Map Dashboard (Jableh)
+      - [x] Frontend: Install Leaflet & React-Leaflet
+      - [x] Frontend: Create MapDashboard page & CityMap component
+      - [x] Frontend: Implement Jableh entrance markers & alert visualization
+  - [ ] A3.2 Heatmaps (Sighting density)
+  - [ ] A3.3 Convoy Analysis
+  - [ ] A3.4 Origin-Destination Tracking
 
 - [ ] **A4. Operational Improvements**
   - [x] A4.1 Fuzzy Search (Partial plate matching)
