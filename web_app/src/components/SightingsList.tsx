@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getSightings } from '../services/api';
-import { Typography, CircularProgress, Box } from '@mui/material';
+import { Typography, Box } from '@mui/material';
 import DashboardStats from './Map/DashboardStats';
 import { SightingsFilter } from './Sightings/SightingsFilter';
 import { SightingsTable } from './Sightings/SightingsTable';
+import { SightingsTableSkeleton } from './Sightings/SightingsTableSkeleton';
+import { useDebounce } from '../hooks/useDebounce';
 
 export const SightingsList: React.FC = () => {
     const [plateSearch, setPlateSearch] = useState('');
@@ -13,10 +15,12 @@ export const SightingsList: React.FC = () => {
     const [endDate, setEndDate] = useState('');
     const [alertType, setAlertType] = useState('All');
 
+    const debouncedPlateSearch = useDebounce(plateSearch, 500);
+
     const { data: sightings, isLoading, error } = useQuery({
-        queryKey: ['sightings', plateSearch, locationId, startDate, endDate, alertType],
+        queryKey: ['sightings', debouncedPlateSearch, locationId, startDate, endDate, alertType],
         queryFn: () => getSightings({
-            plateNumber: plateSearch || undefined,
+            plateNumber: debouncedPlateSearch || undefined,
             locationId: locationId || undefined,
             startDate: startDate || undefined,
             endDate: endDate || undefined,
@@ -24,14 +28,6 @@ export const SightingsList: React.FC = () => {
         }),
         refetchInterval: 5000,
     });
-
-    if (isLoading && !sightings) {
-        return (
-            <Box display="flex" justifyContent="center" p={4}>
-                <CircularProgress />
-            </Box>
-        );
-    }
 
     if (error) {
         return (
@@ -58,7 +54,11 @@ export const SightingsList: React.FC = () => {
                 setAlertType={setAlertType}
             />
 
-            <SightingsTable sightings={sightings || []} />
+            {isLoading && !sightings ? (
+                <SightingsTableSkeleton />
+            ) : (
+                <SightingsTable sightings={sightings || []} />
+            )}
         </Box>
     );
 };

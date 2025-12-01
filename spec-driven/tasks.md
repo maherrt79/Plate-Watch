@@ -88,10 +88,11 @@ The tasks are organized to enable parallel development where possible:
 ## Codebase Improvements
 - [x] Phase 1: Configuration Management (Env Vars)
 - [x] Phase 2: Component Split (Refactor Monolithic Components)
-- [ ] Phase 3: UX Polish (Skeleton Loaders)
+- [x] Phase 3: UX Polish (Skeleton Loaders)
 
 - [ ] **A4. Operational Improvements**
   - [x] A4.1 Fuzzy Search (Partial plate matching)
+  - [x] A4.2 Debounce Search Input (Performance)
 
 ### Phase 3: Cloud Migration (Original Tasks)
 

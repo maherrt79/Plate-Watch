@@ -1,6 +1,6 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Paper, Typography, Box, CircularProgress } from '@mui/material';
+import { Paper, Typography, Box, Skeleton } from '@mui/material';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import WarningIcon from '@mui/icons-material/Warning';
 import { getSightingStats } from '../../services/api';
@@ -44,8 +44,15 @@ const DashboardStats: React.FC = () => {
 
     if (isLoading || !stats) {
         return (
-            <Box sx={{ mb: 2, display: 'flex', gap: 2, justifyContent: 'center' }}>
-                <CircularProgress size={24} />
+            <Box sx={{ mb: 2, display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+                {[...Array(5)].map((_, index) => (
+                    <Box key={index} sx={{ flex: 1, minWidth: '140px' }}>
+                        <Paper sx={{ p: 1.5, height: '100%' }}>
+                            <Skeleton variant="text" width="60%" height={20} sx={{ mb: 1 }} />
+                            <Skeleton variant="rectangular" width="40%" height={32} />
+                        </Paper>
+                    </Box>
+                ))}
             </Box>
         );
     }
