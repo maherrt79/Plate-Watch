@@ -82,7 +82,7 @@ The tasks are organized to enable parallel development where possible:
       - [x] Frontend: Implement Vehicle Trajectory Lines
         - [x] Numbered Sequence Markers for clearer path order
   - [x] A3.2 Heatmaps (Sighting density) (Integrated into Map Dashboard)
-  - [ ] A3.3 Convoy Analysis
+  - [x] A3.3 Convoy Analysis (Backend + Frontend Dashboard)
   - [ ] A3.4 Origin-Destination Tracking
 
 ## Codebase Improvements

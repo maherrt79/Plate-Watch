@@ -6,6 +6,7 @@ import { SightingsList } from './components/SightingsList';
 import { HotlistManager } from './components/HotlistManager';
 import LocalPoliceIcon from '@mui/icons-material/LocalPolice';
 import MapDashboard from './pages/MapDashboard';
+import AnalyticsDashboard from './pages/AnalyticsDashboard';
 import theme from './theme';
 import { ToastProvider, useToast } from './contexts/ToastContext';
 import { setupInterceptors } from './services/api';
@@ -41,6 +42,7 @@ function AppContent() {
           <Button color="inherit" component={Link} to="/">Dashboard</Button>
           <Button color="inherit" component={Link} to="/map">Map</Button>
           <Button color="inherit" component={Link} to="/hotlists">Hotlists</Button>
+          <Button color="inherit" component={Link} to="/analytics">Analytics</Button>
         </Toolbar>
       </AppBar>
       <Container maxWidth={false} sx={{ mt: 4, flex: 1 }}>
@@ -48,6 +50,7 @@ function AppContent() {
           <Route path="/" element={<Dashboard />} />
           <Route path="/map" element={<MapDashboard />} />
           <Route path="/hotlists" element={<HotlistManager />} />
+          <Route path="/analytics" element={<AnalyticsDashboard />} />
         </Routes>
       </Container>
     </Box>

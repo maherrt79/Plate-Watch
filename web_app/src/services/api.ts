@@ -67,3 +67,15 @@ export const createHotlist = async (data: { plate_number: string; description: s
 export const deleteHotlist = async (id: string): Promise<void> => {
     await api.delete(`/hotlists/${id}`);
 };
+
+export interface ConvoyGroup {
+    leader_sighting: Sighting;
+    followers: Sighting[];
+}
+
+export const getConvoyAnalysis = async (plateNumber: string, timeWindowSeconds: number = 5): Promise<ConvoyGroup[]> => {
+    const response = await api.get<ConvoyGroup[]>('/analytics/convoy', {
+        params: { plate_number: plateNumber, time_window_seconds: timeWindowSeconds }
+    });
+    return response.data;
+};

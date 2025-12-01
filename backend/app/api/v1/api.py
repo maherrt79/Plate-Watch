@@ -1,7 +1,8 @@
 from fastapi import APIRouter
 
-from app.api.v1.endpoints import sightings, hotlists
+from app.api.v1.endpoints import sightings, hotlists, analytics
 
 api_router = APIRouter()
 api_router.include_router(sightings.router, prefix="/sightings", tags=["sightings"])
 api_router.include_router(hotlists.router, prefix="/hotlists", tags=["hotlists"])
+api_router.include_router(analytics.router, prefix="/analytics", tags=["analytics"])
