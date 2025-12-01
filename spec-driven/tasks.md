@@ -74,7 +74,7 @@ The tasks are organized to enable parallel development where possible:
   - [ ] A2.3 Dwell Time Calculation
 
 - [ ] **A3. Dashboard & Analytics**
-  - [ ] A3.1 Map Dashboard (Jableh)
+  - [x] A3.1 Map Dashboard (Jableh)
       - [x] Frontend: Install Leaflet & React-Leaflet
       - [x] Frontend: Create MapDashboard page & CityMap component
       - [x] Frontend: Implement Jableh entrance markers & alert visualization

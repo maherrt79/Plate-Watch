@@ -29,6 +29,11 @@ def create_hotlist(
     """
     Create new hotlist entry.
     """
+    # Check for duplicates
+    existing = db.query(models.Hotlist).filter(models.Hotlist.plate_number == hotlist_in.plate_number).first()
+    if existing:
+        raise HTTPException(status_code=400, detail="Plate already exists in hotlist")
+
     hotlist = models.Hotlist(
         plate_number=hotlist_in.plate_number,
         description=hotlist_in.description,

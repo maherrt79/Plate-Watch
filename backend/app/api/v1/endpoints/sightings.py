@@ -63,6 +63,7 @@ def read_sightings(
     locationId: Optional[str] = None,
     startDate: Optional[datetime] = None,
     endDate: Optional[datetime] = None,
+    hotlistCategory: Optional[str] = None,
 ) -> Any:
     """
     Retrieve sightings.
@@ -80,6 +81,12 @@ def read_sightings(
         
     if endDate:
         query = query.filter(models.Sighting.timestamp <= endDate)
+
+    if hotlistCategory:
+        if hotlistCategory == "All Alerts":
+             query = query.filter(models.Sighting.is_hot == True)
+        elif hotlistCategory != "All":
+             query = query.filter(models.Sighting.hotlist_category == hotlistCategory)
         
     sightings = query.order_by(models.Sighting.timestamp.desc()).offset(skip).limit(limit).all()
     return sightings

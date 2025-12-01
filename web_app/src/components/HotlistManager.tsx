@@ -4,16 +4,19 @@ import { getHotlists, createHotlist, deleteHotlist } from '../services/api';
 import {
     Box, Typography, Paper, TextField, Button, Table, TableBody,
     TableCell, TableContainer, TableHead, TableRow, IconButton, Chip,
-    Grid
+    Grid, Snackbar, Alert
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import WarningIcon from '@mui/icons-material/Warning';
+import { AxiosError } from 'axios';
 
 export const HotlistManager = () => {
     const queryClient = useQueryClient();
     const [plateNumber, setPlateNumber] = useState('');
     const [description, setDescription] = useState('');
     const [category, setCategory] = useState('danger');
+    const [error, setError] = useState<string | null>(null);
+    const [success, setSuccess] = useState<string | null>(null);
 
     const { data: hotlists } = useQuery({
         queryKey: ['hotlists'],
@@ -26,13 +29,24 @@ export const HotlistManager = () => {
             queryClient.invalidateQueries({ queryKey: ['hotlists'] });
             setPlateNumber('');
             setDescription('');
+            setSuccess('Plate added to hotlist');
+            setError(null);
         },
+        onError: (err: AxiosError<{ detail: string }>) => {
+            if (err.response?.status === 400) {
+                setError(err.response.data.detail || 'Plate already exists in hotlist');
+            } else {
+                setError('Failed to add plate');
+            }
+            setSuccess(null);
+        }
     });
 
     const deleteMutation = useMutation({
         mutationFn: deleteHotlist,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['hotlists'] });
+            setSuccess('Plate removed from hotlist');
         },
     });
 
@@ -43,8 +57,13 @@ export const HotlistManager = () => {
         }
     };
 
+    const handleCloseSnackbar = () => {
+        setError(null);
+        setSuccess(null);
+    };
+
     return (
-        <Box>
+        <Box sx={{ width: '100%' }}>
             <Typography variant="h5" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <WarningIcon color="error" /> Hotlist Manager
             </Typography>
@@ -145,6 +164,17 @@ export const HotlistManager = () => {
                     </TableBody>
                 </Table>
             </TableContainer>
+
+            <Snackbar open={!!error} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+                <Alert onClose={handleCloseSnackbar} severity="error" sx={{ width: '100%' }}>
+                    {error}
+                </Alert>
+            </Snackbar>
+            <Snackbar open={!!success} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+                <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%' }}>
+                    {success}
+                </Alert>
+            </Snackbar>
         </Box>
     );
 };

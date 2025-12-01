@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
     Table,
     TableBody,
@@ -9,33 +9,28 @@ import {
     Paper,
     Typography,
     Chip,
-    Box,
-    TextField,
-    FormControl,
-    InputLabel,
-    Select,
-    MenuItem,
-    type SelectChangeEvent
+    Box
 } from '@mui/material';
 import WarningIcon from '@mui/icons-material/Warning';
 import type { Sighting } from '../../types/sighting';
 import { ENTRANCES } from './CityMap';
+import { getCategoryStyle } from '../../utils/hotlistColors';
 
 interface RecentAlertsProps {
     sightings: Sighting[];
     onSelectSighting: (sighting: Sighting) => void;
     selectedSightingId?: string;
+    plateFilter: string;
+    categoryFilter: string;
 }
 
-const RecentAlerts: React.FC<RecentAlertsProps> = ({ sightings, onSelectSighting, selectedSightingId }) => {
-    const [plateFilter, setPlateFilter] = useState('');
-    const [categoryFilter, setCategoryFilter] = useState('All');
-
-    // Get unique categories
-    const categories = Array.from(new Set(sightings
-        .filter(s => s.is_hot && s.hotlist_category)
-        .map(s => s.hotlist_category!)
-    ));
+const RecentAlerts: React.FC<RecentAlertsProps> = ({
+    sightings,
+    onSelectSighting,
+    selectedSightingId,
+    plateFilter,
+    categoryFilter
+}) => {
 
     // Filter for hot sightings and sort by timestamp descending
     const alerts = sightings
@@ -45,40 +40,12 @@ const RecentAlerts: React.FC<RecentAlertsProps> = ({ sightings, onSelectSighting
         .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
         .slice(0, 10); // Show last 10 alerts
 
-    const handleCategoryChange = (event: SelectChangeEvent) => {
-        setCategoryFilter(event.target.value as string);
-    };
-
     return (
         <TableContainer component={Paper} sx={{ maxHeight: 600 }}>
             <Box sx={{ p: 2 }}>
-                <Typography variant="h6" sx={{ display: 'flex', alignItems: 'center', color: 'error.main', mb: 2 }}>
+                <Typography variant="h6" sx={{ display: 'flex', alignItems: 'center', color: 'error.main', mb: 0 }}>
                     <WarningIcon sx={{ mr: 1 }} /> Recent Alerts
                 </Typography>
-
-                <Box sx={{ display: 'flex', gap: 1, mb: 1 }}>
-                    <TextField
-                        label="Plate"
-                        variant="outlined"
-                        size="small"
-                        fullWidth
-                        value={plateFilter}
-                        onChange={(e) => setPlateFilter(e.target.value)}
-                    />
-                    <FormControl size="small" fullWidth>
-                        <InputLabel>Type</InputLabel>
-                        <Select
-                            value={categoryFilter}
-                            label="Type"
-                            onChange={handleCategoryChange}
-                        >
-                            <MenuItem value="All">All</MenuItem>
-                            {categories.map(cat => (
-                                <MenuItem key={cat} value={cat}>{cat}</MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                </Box>
             </Box>
 
             {alerts.length === 0 ? (
@@ -104,11 +71,12 @@ const RecentAlerts: React.FC<RecentAlertsProps> = ({ sightings, onSelectSighting
                                     key={alert.id}
                                     onClick={() => onSelectSighting(alert)}
                                     sx={{
-                                        backgroundColor: isSelected ? '#ffebee' : '#fff0f0',
+                                        backgroundColor: isSelected ? 'rgba(255, 23, 68, 0.2)' : 'rgba(255, 23, 68, 0.05)',
                                         cursor: 'pointer',
-                                        borderLeft: isSelected ? '4px solid #d32f2f' : 'none',
+                                        borderLeft: isSelected ? '4px solid #ff1744' : '4px solid transparent',
+                                        transition: 'all 0.2s',
                                         '&:hover': {
-                                            backgroundColor: '#ffcdd2',
+                                            backgroundColor: 'rgba(255, 23, 68, 0.15)',
                                         }
                                     }}
                                 >
@@ -120,7 +88,7 @@ const RecentAlerts: React.FC<RecentAlertsProps> = ({ sightings, onSelectSighting
                                             <Chip
                                                 label={alert.hotlist_category}
                                                 size="small"
-                                                color="error"
+                                                color={getCategoryStyle(alert.hotlist_category).color}
                                                 variant="outlined"
                                                 sx={{ mt: 0.5, height: 20, fontSize: '0.7rem' }}
                                             />

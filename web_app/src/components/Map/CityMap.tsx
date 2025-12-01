@@ -4,37 +4,26 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import type { Sighting } from '../../types/sighting';
 
-// Fix for default marker icons in React-Leaflet
-import icon from 'leaflet/dist/images/marker-icon.png';
-import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+// Function to create custom DivIcon
+const createCustomIcon = (isHot: boolean, isSelected: boolean) => {
+    let className = 'marker-pin';
+    if (isHot) className += ' hot';
+    if (isSelected) className += ' selected';
 
-let DefaultIcon = L.icon({
-    iconUrl: icon,
-    shadowUrl: iconShadow,
-    iconSize: [25, 41],
-    iconAnchor: [12, 41]
-});
+    return L.divIcon({
+        className: 'custom-div-icon',
+        html: `<div class="${className}"></div>`,
+        iconSize: [30, 42],
+        iconAnchor: [15, 42]
+    });
+};
 
-L.Marker.prototype.options.icon = DefaultIcon;
-
-// Custom red icon for alerts
-const AlertIcon = L.icon({
-    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
-    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41]
-});
-
-// Custom gold icon for selected item
-const SelectedIcon = L.icon({
-    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-gold.png',
-    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41]
+// Static Entrance Icon (simpler)
+const EntranceIcon = L.divIcon({
+    className: 'custom-div-icon',
+    html: `<div style="background-color: #444; width: 12px; height: 12px; border-radius: 50%; border: 2px solid #888;"></div>`,
+    iconSize: [12, 12],
+    iconAnchor: [6, 6]
 });
 
 // Jableh Coordinates
@@ -76,18 +65,18 @@ const MapController: React.FC<{ selectedSighting?: Sighting | null }> = ({ selec
 
 const CityMap: React.FC<CityMapProps> = ({ sightings, selectedSighting }) => {
     return (
-        <div style={{ height: '600px', width: '100%', borderRadius: '8px', overflow: 'hidden', border: '1px solid #ccc', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
-            <MapContainer center={JABLEH_CENTER} zoom={13} style={{ height: '100%', width: '100%' }}>
+        <div style={{ height: '600px', width: '100%', borderRadius: '16px', overflow: 'hidden', border: '1px solid rgba(0, 229, 255, 0.2)', boxShadow: '0 0 20px rgba(0, 229, 255, 0.1)' }}>
+            <MapContainer center={JABLEH_CENTER} zoom={13} style={{ height: '100%', width: '100%', background: '#050b14' }}>
                 <MapController selectedSighting={selectedSighting} />
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-                    url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+                    url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
                 />
 
                 {/* Static Entrance Markers */}
                 {Object.entries(ENTRANCES).map(([id, { lat, lng, label }]) => (
-                    <Marker key={id} position={[lat, lng]} opacity={0.5}>
-                        <Popup>
+                    <Marker key={id} position={[lat, lng]} icon={EntranceIcon} opacity={0.8}>
+                        <Popup className="custom-popup">
                             <strong>{label}</strong><br />
                             Location ID: {id}
                         </Popup>
@@ -100,9 +89,7 @@ const CityMap: React.FC<CityMapProps> = ({ sightings, selectedSighting }) => {
                     if (!location) return null;
 
                     const isSelected = selectedSighting?.id === sighting.id;
-                    let icon = DefaultIcon;
-                    if (sighting.is_hot) icon = AlertIcon;
-                    if (isSelected) icon = SelectedIcon;
+                    const icon = createCustomIcon(!!sighting.is_hot, isSelected);
 
                     return (
                         <Marker
@@ -111,10 +98,10 @@ const CityMap: React.FC<CityMapProps> = ({ sightings, selectedSighting }) => {
                             icon={icon}
                             zIndexOffset={sighting.is_hot || isSelected ? 1000 : 0}
                         >
-                            <Popup>
+                            <Popup className="custom-popup">
                                 <strong>{sighting.plate_number}</strong><br />
                                 {new Date(sighting.timestamp).toLocaleString()}<br />
-                                {sighting.is_hot && <span style={{ color: 'red', fontWeight: 'bold' }}>HOTLIST ALERT!</span>}
+                                {sighting.is_hot && <span style={{ color: '#ff1744', fontWeight: 'bold' }}>HOTLIST ALERT!</span>}
                                 {sighting.vehicle_make && <br />}
                                 {sighting.vehicle_make} {sighting.vehicle_model} ({sighting.vehicle_color})
                             </Popup>

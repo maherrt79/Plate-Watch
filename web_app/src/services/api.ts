@@ -15,6 +15,7 @@ export const getSightings = async (params?: {
     locationId?: string;
     startDate?: string;
     endDate?: string;
+    hotlistCategory?: string;
 }): Promise<Sighting[]> => {
     const response = await api.get<Sighting[]>('/sightings', {
         params,
