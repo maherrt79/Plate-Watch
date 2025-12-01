@@ -46,7 +46,7 @@ export const SightingsList: React.FC = () => {
 
     return (
         <Box sx={{ width: '100%' }}>
-            <DashboardStats sightings={sightings || []} />
+            <DashboardStats />
             <Paper sx={{ p: 2, mb: 2 }}>
                 <Grid container spacing={2} alignItems="center">
                     <Grid size={{ xs: 12, sm: 3 }}>

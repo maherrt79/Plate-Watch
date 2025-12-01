@@ -23,6 +23,17 @@ export const getSightings = async (params?: {
     return response.data;
 };
 
+export interface SightingStats {
+    total_sightings: number;
+    total_alerts: number;
+    alerts_by_category: Record<string, number>;
+}
+
+export const getSightingStats = async (): Promise<SightingStats> => {
+    const response = await api.get<SightingStats>('/sightings/stats');
+    return response.data;
+};
+
 export interface Hotlist {
     id: string;
     plate_number: string;

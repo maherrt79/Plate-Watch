@@ -30,3 +30,9 @@ class Sighting(SightingBase):
     class Config:
         from_attributes = True
         populate_by_name = True
+
+class SightingStats(BaseModel):
+    total_sightings: int
+    total_alerts: int
+    alerts_by_category: dict[str, int]
+

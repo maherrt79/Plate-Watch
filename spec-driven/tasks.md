@@ -80,7 +80,8 @@ The tasks are organized to enable parallel development where possible:
       - [x] Frontend: Implement Jableh entrance markers & alert visualization
       - [x] Frontend: Add Heatmap Layer (leaflet.heat)
       - [x] Frontend: Implement Vehicle Trajectory Lines
-  - [ ] A3.2 Heatmaps (Sighting density)
+        - [x] Numbered Sequence Markers for clearer path order
+  - [x] A3.2 Heatmaps (Sighting density) (Integrated into Map Dashboard)
   - [ ] A3.3 Convoy Analysis
   - [ ] A3.4 Origin-Destination Tracking
 

@@ -19,6 +19,29 @@ def validate_api_key(x_api_key: str = Header(...)):
             raise HTTPException(status_code=401, detail="Invalid API Key")
     return x_api_key
 
+from sqlalchemy import func
+
+@router.get("/stats", response_model=schemas.SightingStats)
+def get_stats(
+    db: Session = Depends(deps.get_db),
+) -> Any:
+    """
+    Get sighting statistics.
+    """
+    total = db.query(models.Sighting).count()
+    alerts = db.query(models.Sighting).filter(models.Sighting.is_hot == True).count()
+    
+    # Group by category
+    rows = db.query(models.Sighting.hotlist_category, func.count(models.Sighting.id)).filter(models.Sighting.is_hot == True).group_by(models.Sighting.hotlist_category).all()
+    
+    category_counts = {row[0]: row[1] for row in rows if row[0]}
+    
+    return {
+        "total_sightings": total,
+        "total_alerts": alerts,
+        "alerts_by_category": category_counts
+    }
+
 @router.post("/", response_model=schemas.Sighting, status_code=201)
 def create_sighting(
     *,

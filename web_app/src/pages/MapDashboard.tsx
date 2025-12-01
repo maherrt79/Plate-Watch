@@ -39,7 +39,7 @@ const MapDashboard: React.FC = () => {
                 Live Map Dashboard - Jableh
             </Typography>
 
-            <DashboardStats sightings={sightings} />
+            <DashboardStats />
 
             <Paper sx={{ p: 2, mb: 3 }}>
                 <Grid container spacing={2} alignItems="center">

@@ -1,8 +1,9 @@
 import React from 'react';
-import { Paper, Typography, Box } from '@mui/material';
+import { useQuery } from '@tanstack/react-query';
+import { Paper, Typography, Box, CircularProgress } from '@mui/material';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import WarningIcon from '@mui/icons-material/Warning';
-import type { Sighting } from '../../types/sighting';
+import { getSightingStats } from '../../services/api';
 import { getCategoryStyle, HOTLIST_CATEGORIES } from '../../utils/hotlistColors';
 
 interface StatCardProps {
@@ -34,37 +35,30 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color }) => (
     </Paper>
 );
 
-interface DashboardStatsProps {
-    sightings: Sighting[];
-}
+const DashboardStats: React.FC = () => {
+    const { data: stats, isLoading } = useQuery({
+        queryKey: ['sightingStats'],
+        queryFn: getSightingStats,
+        refetchInterval: 10000, // Refresh every 10s
+    });
 
-const DashboardStats: React.FC<DashboardStatsProps> = ({ sightings }) => {
-    // Calculate stats
-    const totalSightings = sightings.length;
-    const activeAlerts = sightings.filter(s => s.is_hot).length;
+    if (isLoading || !stats) {
+        return (
+            <Box sx={{ mb: 2, display: 'flex', gap: 2, justifyContent: 'center' }}>
+                <CircularProgress size={24} />
+            </Box>
+        );
+    }
 
-    // Initialize counts for standard categories
+    const { total_sightings, total_alerts, alerts_by_category } = stats;
     const standardCategories = Object.keys(HOTLIST_CATEGORIES).filter(k => k !== 'default');
-    const alertsByCategory: Record<string, number> = {};
-
-    standardCategories.forEach(cat => {
-        alertsByCategory[cat] = 0;
-    });
-
-    // Populate with actual data
-    sightings.forEach(s => {
-        if (s.is_hot && s.hotlist_category) {
-            const cat = s.hotlist_category.toLowerCase();
-            alertsByCategory[cat] = (alertsByCategory[cat] || 0) + 1;
-        }
-    });
 
     return (
         <Box sx={{ mb: 2, display: 'flex', gap: 2, flexWrap: 'wrap' }}>
             <Box sx={{ flex: 1, minWidth: '140px' }}>
                 <StatCard
                     title="Total Sightings"
-                    value={totalSightings}
+                    value={total_sightings}
                     icon={<DirectionsCarIcon />}
                     color="#00e5ff"
                 />
@@ -72,12 +66,13 @@ const DashboardStats: React.FC<DashboardStatsProps> = ({ sightings }) => {
             <Box sx={{ flex: 1, minWidth: '140px' }}>
                 <StatCard
                     title="Total Alerts"
-                    value={activeAlerts}
+                    value={total_alerts}
                     icon={<WarningIcon />}
                     color="#ff1744"
                 />
             </Box>
-            {Object.entries(alertsByCategory).map(([category, count]) => {
+            {standardCategories.map(category => {
+                const count = alerts_by_category[category] || 0;
                 const style = getCategoryStyle(category);
                 return (
                     <Box key={category} sx={{ flex: 1, minWidth: '140px' }}>
