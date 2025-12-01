@@ -85,6 +85,11 @@ The tasks are organized to enable parallel development where possible:
   - [ ] A3.3 Convoy Analysis
   - [ ] A3.4 Origin-Destination Tracking
 
+## Codebase Improvements
+- [x] Phase 1: Configuration Management (Env Vars)
+- [ ] Phase 2: Component Split (Refactor Monolithic Components)
+- [ ] Phase 3: UX Polish (Skeleton Loaders)
+
 - [ ] **A4. Operational Improvements**
   - [x] A4.1 Fuzzy Search (Partial plate matching)
 

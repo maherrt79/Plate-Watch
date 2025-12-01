@@ -1,12 +1,13 @@
 import axios from 'axios';
 import type { Sighting } from '../types/sighting';
 
-const API_URL = 'http://localhost:8000/api/v1';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1';
+const API_KEY = import.meta.env.VITE_API_KEY || 'dev-api-key-123';
 
 export const api = axios.create({
     baseURL: API_URL,
     headers: {
-        'x-api-key': 'dev-api-key-123'
+        'x-api-key': API_KEY
     }
 });
 
@@ -43,21 +44,15 @@ export interface Hotlist {
 }
 
 export const getHotlists = async (): Promise<Hotlist[]> => {
-    const response = await api.get<Hotlist[]>('/hotlists', {
-        headers: { 'x-api-key': 'dev-api-key-123' }
-    });
+    const response = await api.get<Hotlist[]>('/hotlists');
     return response.data;
 };
 
 export const createHotlist = async (data: { plate_number: string; description: string; category: string }): Promise<Hotlist> => {
-    const response = await api.post<Hotlist>('/hotlists', data, {
-        headers: { 'x-api-key': 'dev-api-key-123' }
-    });
+    const response = await api.post<Hotlist>('/hotlists', data);
     return response.data;
 };
 
 export const deleteHotlist = async (id: string): Promise<void> => {
-    await api.delete(`/hotlists/${id}`, {
-        headers: { 'x-api-key': 'dev-api-key-123' }
-    });
+    await api.delete(`/hotlists/${id}`);
 };
