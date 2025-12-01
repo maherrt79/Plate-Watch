@@ -34,18 +34,20 @@ function AppContent() {
   return (
     <Box sx={{ flexGrow: 1, minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <AppBar position="static" elevation={0}>
-        <Toolbar>
-          <LocalPoliceIcon sx={{ mr: 2, color: 'primary.main' }} />
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1, textTransform: 'uppercase', letterSpacing: 1 }}>
-            Plate-Watch <Box component="span" sx={{ color: 'primary.main' }}>PRO</Box>
-          </Typography>
-          <Button color="inherit" component={Link} to="/">Dashboard</Button>
-          <Button color="inherit" component={Link} to="/map">Map</Button>
-          <Button color="inherit" component={Link} to="/hotlists">Hotlists</Button>
-          <Button color="inherit" component={Link} to="/analytics">Analytics</Button>
-        </Toolbar>
+        <Container maxWidth="xl">
+          <Toolbar disableGutters>
+            <LocalPoliceIcon sx={{ mr: 2, color: 'primary.main' }} />
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1, textTransform: 'uppercase', letterSpacing: 1 }}>
+              Plate-Watch <Box component="span" sx={{ color: 'primary.main' }}>PRO</Box>
+            </Typography>
+            <Button color="inherit" component={Link} to="/">Dashboard</Button>
+            <Button color="inherit" component={Link} to="/map">Map</Button>
+            <Button color="inherit" component={Link} to="/hotlists">Hotlists</Button>
+            <Button color="inherit" component={Link} to="/analytics">Analytics</Button>
+          </Toolbar>
+        </Container>
       </AppBar>
-      <Container maxWidth={false} sx={{ mt: 4, flex: 1 }}>
+      <Container maxWidth="xl" sx={{ mt: 4, flex: 1 }}>
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/map" element={<MapDashboard />} />
