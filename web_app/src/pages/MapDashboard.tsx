@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Typography, Box, Paper, Grid, TextField } from '@mui/material';
+import { Typography, Box, Paper, Grid, TextField, FormControlLabel, Switch, FormGroup } from '@mui/material';
 import CityMap, { ENTRANCES } from '../components/Map/CityMap';
 import RecentAlerts from '../components/Map/RecentAlerts';
 import DashboardStats from '../components/Map/DashboardStats';
@@ -10,6 +10,8 @@ const MapDashboard: React.FC = () => {
     const [selectedSighting, setSelectedSighting] = useState<Sighting | null>(null);
     const [plateFilter, setPlateFilter] = useState('');
     const [categoryFilter, setCategoryFilter] = useState('All');
+    const [showHeatmap, setShowHeatmap] = useState(false);
+    const [showTrajectory, setShowTrajectory] = useState(true);
 
     const { data: sightings = [] } = useQuery({
         queryKey: ['mapSightings', plateFilter, categoryFilter],
@@ -41,7 +43,7 @@ const MapDashboard: React.FC = () => {
 
             <Paper sx={{ p: 2, mb: 3 }}>
                 <Grid container spacing={2} alignItems="center">
-                    <Grid size={{ xs: 12, sm: 6 }}>
+                    <Grid size={{ xs: 12, sm: 4 }}>
                         <TextField
                             label="Search Plate"
                             variant="outlined"
@@ -51,7 +53,7 @@ const MapDashboard: React.FC = () => {
                             size="small"
                         />
                     </Grid>
-                    <Grid size={{ xs: 12, sm: 6 }}>
+                    <Grid size={{ xs: 12, sm: 4 }}>
                         <TextField
                             select
                             label="Alert Type"
@@ -69,6 +71,18 @@ const MapDashboard: React.FC = () => {
                             <option value="info">Info</option>
                         </TextField>
                     </Grid>
+                    <Grid size={{ xs: 12, sm: 4 }}>
+                        <FormGroup row sx={{ justifyContent: 'center' }}>
+                            <FormControlLabel
+                                control={<Switch checked={showHeatmap} onChange={(e) => setShowHeatmap(e.target.checked)} />}
+                                label="Heatmap"
+                            />
+                            <FormControlLabel
+                                control={<Switch checked={showTrajectory} onChange={(e) => setShowTrajectory(e.target.checked)} />}
+                                label="Trajectory"
+                            />
+                        </FormGroup>
+                    </Grid>
                 </Grid>
             </Paper>
 
@@ -78,6 +92,8 @@ const MapDashboard: React.FC = () => {
                     <CityMap
                         sightings={filteredSightings}
                         selectedSighting={selectedSighting}
+                        showHeatmap={showHeatmap}
+                        showTrajectory={showTrajectory}
                     />
                     <Box sx={{ mt: 2 }}>
                         <Typography variant="body2" color="textSecondary">

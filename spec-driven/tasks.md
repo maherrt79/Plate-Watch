@@ -78,6 +78,8 @@ The tasks are organized to enable parallel development where possible:
       - [x] Frontend: Install Leaflet & React-Leaflet
       - [x] Frontend: Create MapDashboard page & CityMap component
       - [x] Frontend: Implement Jableh entrance markers & alert visualization
+      - [x] Frontend: Add Heatmap Layer (leaflet.heat)
+      - [x] Frontend: Implement Vehicle Trajectory Lines
   - [ ] A3.2 Heatmaps (Sighting density)
   - [ ] A3.3 Convoy Analysis
   - [ ] A3.4 Origin-Destination Tracking
