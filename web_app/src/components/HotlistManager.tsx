@@ -5,7 +5,7 @@ import { Box, Typography } from '@mui/material';
 import WarningIcon from '@mui/icons-material/Warning';
 import { HotlistForm } from './Hotlist/HotlistForm';
 import { HotlistTable } from './Hotlist/HotlistTable';
-import { useToast } from '../contexts/ToastContext';
+import { useToast } from '../contexts/ToastContextDefinition';
 
 export const HotlistManager = () => {
     const queryClient = useQueryClient();

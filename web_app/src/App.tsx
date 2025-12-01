@@ -8,8 +8,10 @@ import LocalPoliceIcon from '@mui/icons-material/LocalPolice';
 import MapDashboard from './pages/MapDashboard';
 import AnalyticsDashboard from './pages/AnalyticsDashboard';
 import theme from './theme';
-import { ToastProvider, useToast } from './contexts/ToastContext';
+import { ToastProvider } from './contexts/ToastContext';
+import { useToast } from './contexts/ToastContextDefinition';
 import { setupInterceptors } from './services/api';
+
 
 const queryClient = new QueryClient();
 
@@ -23,6 +25,8 @@ function Dashboard() {
     </>
   );
 }
+
+import AlertsPage from './pages/AlertsPage';
 
 function AppContent() {
   const { showToast } = useToast();
@@ -41,6 +45,7 @@ function AppContent() {
               Plate-Watch <Box component="span" sx={{ color: 'primary.main' }}>PRO</Box>
             </Typography>
             <Button color="inherit" component={Link} to="/">Dashboard</Button>
+            <Button color="inherit" component={Link} to="/alerts" sx={{ color: 'primary.main', fontWeight: 'bold' }}>Live Feed</Button>
             <Button color="inherit" component={Link} to="/map">Map</Button>
             <Button color="inherit" component={Link} to="/hotlists">Hotlists</Button>
             <Button color="inherit" component={Link} to="/analytics">Analytics</Button>
@@ -50,6 +55,7 @@ function AppContent() {
       <Container maxWidth="xl" sx={{ mt: 4, flex: 1 }}>
         <Routes>
           <Route path="/" element={<Dashboard />} />
+          <Route path="/alerts" element={<AlertsPage />} />
           <Route path="/map" element={<MapDashboard />} />
           <Route path="/hotlists" element={<HotlistManager />} />
           <Route path="/analytics" element={<AnalyticsDashboard />} />
