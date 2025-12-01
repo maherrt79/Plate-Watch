@@ -93,6 +93,7 @@ The tasks are organized to enable parallel development where possible:
 - [ ] **A4. Operational Improvements**
   - [x] A4.1 Fuzzy Search (Partial plate matching)
   - [x] A4.2 Debounce Search Input (Performance)
+  - [x] A4.3 Global Error Handling (Axios Interceptors)
 
 ### Phase 3: Cloud Migration (Original Tasks)
 

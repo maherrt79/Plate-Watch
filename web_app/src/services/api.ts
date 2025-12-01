@@ -11,6 +11,17 @@ export const api = axios.create({
     }
 });
 
+export const setupInterceptors = (showToast: (msg: string, type: 'error' | 'success' | 'info' | 'warning') => void) => {
+    api.interceptors.response.use(
+        (response) => response,
+        (error) => {
+            const message = error.response?.data?.detail || error.message || 'An unexpected error occurred';
+            showToast(message, 'error');
+            return Promise.reject(error);
+        }
+    );
+};
+
 export const getSightings = async (params?: {
     plateNumber?: string;
     locationId?: string;
