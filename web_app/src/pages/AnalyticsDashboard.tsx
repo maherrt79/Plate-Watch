@@ -3,15 +3,17 @@ import { useQuery } from '@tanstack/react-query';
 import {
     Box, Typography, TextField, Button, Paper, Grid, Slider,
     Card, CardContent, CardHeader, Divider, Chip,
-    Table, TableBody, TableCell, TableHead, TableRow
+    Table, TableBody, TableCell, TableHead, TableRow,
+    Tabs, Tab, CircularProgress
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import GroupIcon from '@mui/icons-material/Group';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
-import { getConvoyAnalysis } from '../services/api';
+import RouteIcon from '@mui/icons-material/Route';
+import { getConvoyAnalysis, getODMatrix } from '../services/api';
 import { format } from 'date-fns';
 
-const AnalyticsDashboard: React.FC = () => {
+const ConvoyAnalysis: React.FC = () => {
     const [plateInput, setPlateInput] = useState('');
     const [searchPlate, setSearchPlate] = useState('');
     const [timeWindow, setTimeWindow] = useState<number>(5);
@@ -31,9 +33,6 @@ const AnalyticsDashboard: React.FC = () => {
 
     return (
         <Box>
-            <Typography variant="h4" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                <GroupIcon fontSize="large" color="primary" /> Convoy Analysis
-            </Typography>
             <Typography variant="body1" color="textSecondary" paragraph>
                 Detect vehicles traveling together by finding sightings at the same location within a short time window.
             </Typography>
@@ -144,6 +143,83 @@ const AnalyticsDashboard: React.FC = () => {
                     </Grid>
                 </Box>
             )}
+        </Box>
+    );
+};
+
+const ODMatrix: React.FC = () => {
+    const { data: matrix, isLoading } = useQuery({
+        queryKey: ['od-matrix'],
+        queryFn: () => getODMatrix(),
+    });
+
+    if (isLoading) return <CircularProgress />;
+    if (!matrix || matrix.length === 0) return <Typography>No trip data available.</Typography>;
+
+    // Extract unique locations
+    const locations = Array.from(new Set([
+        ...matrix.map(m => m.origin),
+        ...matrix.map(m => m.destination)
+    ])).sort();
+
+    return (
+        <Box>
+            <Typography variant="body1" color="textSecondary" paragraph>
+                Visualize traffic flow between locations. Rows represent Origins, Columns represent Destinations.
+            </Typography>
+            <Paper sx={{ overflowX: 'auto' }}>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell sx={{ fontWeight: 'bold' }}>Origin \ Destination</TableCell>
+                            {locations.map(loc => (
+                                <TableCell key={loc} align="center" sx={{ fontWeight: 'bold' }}>{loc}</TableCell>
+                            ))}
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {locations.map(origin => (
+                            <TableRow key={origin}>
+                                <TableCell sx={{ fontWeight: 'bold' }}>{origin}</TableCell>
+                                {locations.map(dest => {
+                                    const entry = matrix.find(m => m.origin === origin && m.destination === dest);
+                                    const count = entry ? entry.count : 0;
+                                    return (
+                                        <TableCell key={dest} align="center" sx={{
+                                            bgcolor: count > 0 ? `rgba(25, 118, 210, ${Math.min(count / 10, 0.5)})` : 'inherit',
+                                            fontWeight: count > 0 ? 'bold' : 'normal'
+                                        }}>
+                                            {count > 0 ? count : '-'}
+                                        </TableCell>
+                                    );
+                                })}
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </Paper>
+        </Box>
+    );
+};
+
+const AnalyticsDashboard: React.FC = () => {
+    const [tab, setTab] = useState(0);
+
+    return (
+        <Box>
+            <Typography variant="h4" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                <GroupIcon fontSize="large" color="primary" /> Analytics Dashboard
+            </Typography>
+
+            <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
+                <Tabs value={tab} onChange={(_, newValue) => setTab(newValue)}>
+                    <Tab icon={<GroupIcon />} label="Convoy Analysis" />
+                    <Tab icon={<RouteIcon />} label="Origin-Destination Matrix" />
+                </Tabs>
+            </Box>
+
+            {tab === 0 && <ConvoyAnalysis />}
+            {tab === 1 && <ODMatrix />}
         </Box>
     );
 };

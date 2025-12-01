@@ -46,3 +46,64 @@ def get_convoy_analysis(
             })
 
     return results
+
+@router.get("/od-matrix")
+def get_od_matrix(
+    db: Session = Depends(deps.get_db),
+    start_date: Optional[str] = Query(None, description="Start date (ISO 8601)"),
+    end_date: Optional[str] = Query(None, description="End date (ISO 8601)"),
+) -> Any:
+    """
+    Calculate Origin-Destination Matrix.
+    Returns a list of {origin, destination, count} objects.
+    """
+    # 1. Fetch all sightings within range (or last 24h if not specified)
+    query = db.query(models.Sighting).order_by(models.Sighting.plate_number, models.Sighting.timestamp)
+    
+    if start_date:
+        query = query.filter(models.Sighting.timestamp >= start_date)
+    if end_date:
+        query = query.filter(models.Sighting.timestamp <= end_date)
+        
+    sightings = query.all()
+    
+    # 2. Process in Python to find trips
+    trips = {} # (origin, destination) -> count
+    
+    if not sightings:
+        return []
+
+    current_plate = None
+    first_sighting = None
+    last_sighting = None
+
+    for sighting in sightings:
+        if sighting.plate_number != current_plate:
+            # New plate, finalize previous trip if valid
+            if current_plate and first_sighting and last_sighting and first_sighting != last_sighting:
+                origin = first_sighting.location_id
+                dest = last_sighting.location_id
+                if origin != dest:
+                    trips[(origin, dest)] = trips.get((origin, dest), 0) + 1
+            
+            # Reset for new plate
+            current_plate = sighting.plate_number
+            first_sighting = sighting
+            last_sighting = sighting
+        else:
+            # Same plate, update last sighting
+            last_sighting = sighting
+
+    # Finalize last plate
+    if current_plate and first_sighting and last_sighting and first_sighting != last_sighting:
+        origin = first_sighting.location_id
+        dest = last_sighting.location_id
+        if origin != dest:
+            trips[(origin, dest)] = trips.get((origin, dest), 0) + 1
+
+    # 3. Format results
+    results = []
+    for (origin, dest), count in trips.items():
+        results.append({"origin": origin, "destination": dest, "count": count})
+        
+    return results

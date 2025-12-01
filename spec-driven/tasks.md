@@ -83,7 +83,7 @@ The tasks are organized to enable parallel development where possible:
         - [x] Numbered Sequence Markers for clearer path order
   - [x] A3.2 Heatmaps (Sighting density) (Integrated into Map Dashboard)
   - [x] A3.3 Convoy Analysis (Backend + Frontend Dashboard)
-  - [ ] A3.4 Origin-Destination Tracking
+  - [x] A3.4 Origin-Destination Tracking (OD Matrix Visualization)
 
 ## Codebase Improvements
 - [x] Phase 1: Configuration Management (Env Vars)
@@ -594,3 +594,9 @@ The tasks are organized to enable parallel development where possible:
  \- Document Edge Device setup and configuration  
  \- Create troubleshooting guide
 
+
+## Future Features (Backlog)
+- [ ] **F1. Dwell Time Analysis**
+  - Calculate time difference between first and last sighting to identify "pass-through" vs "destination" traffic.
+- [ ] **F2. Frequency Analysis**
+  - Identify residents vs visitors based on sighting frequency over time.

@@ -79,3 +79,16 @@ export const getConvoyAnalysis = async (plateNumber: string, timeWindowSeconds: 
     });
     return response.data;
 };
+
+export interface ODMatrixEntry {
+    origin: string;
+    destination: string;
+    count: number;
+}
+
+export const getODMatrix = async (startDate?: string, endDate?: string): Promise<ODMatrixEntry[]> => {
+    const response = await api.get<ODMatrixEntry[]>('/analytics/od-matrix', {
+        params: { start_date: startDate, end_date: endDate }
+    });
+    return response.data;
+};
