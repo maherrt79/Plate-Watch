@@ -32,6 +32,7 @@ const AlertFeed: React.FC = () => {
     const alerts = React.useMemo(() => {
         if (!sightings) return [];
 
+
         return sightings.slice(0, 20).map((sighting: Sighting) => {
             let severity: 'critical' | 'warning' | 'safe' = 'safe';
             let message = 'LOGGED';

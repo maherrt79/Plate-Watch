@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Typography, Box, Paper, Grid, TextField, FormControlLabel, Switch, FormGroup } from '@mui/material';
-import CityMap, { ENTRANCES } from '../components/Map/CityMap';
+import CityMap from '../components/Map/CityMap';
+import { ENTRANCES } from '../components/Map/constants';
 import RecentAlerts from '../components/Map/RecentAlerts';
 import DashboardStats from '../components/Map/DashboardStats';
 import type { Sighting } from '../types/sighting';

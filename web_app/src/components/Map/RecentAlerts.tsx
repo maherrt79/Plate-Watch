@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import WarningIcon from '@mui/icons-material/Warning';
 import type { Sighting } from '../../types/sighting';
-import { ENTRANCES } from './CityMap';
+import { ENTRANCES } from './constants';
 import { getCategoryStyle } from '../../utils/hotlistColors';
 
 interface RecentAlertsProps {

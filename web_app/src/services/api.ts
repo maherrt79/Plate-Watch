@@ -29,7 +29,7 @@ export const getSightings = async (params?: {
     endDate?: string;
     hotlistCategory?: string;
 }): Promise<Sighting[]> => {
-    const response = await api.get<Sighting[]>('/sightings', {
+    const response = await api.get<Sighting[]>('/sightings/', {
         params,
     });
     return response.data;
@@ -42,7 +42,7 @@ export interface SightingStats {
 }
 
 export const getSightingStats = async (): Promise<SightingStats> => {
-    const response = await api.get<SightingStats>('/sightings/stats');
+    const response = await api.get<SightingStats>('/sightings/stats/');
     return response.data;
 };
 
@@ -55,17 +55,17 @@ export interface Hotlist {
 }
 
 export const getHotlists = async (): Promise<Hotlist[]> => {
-    const response = await api.get<Hotlist[]>('/hotlists');
+    const response = await api.get<Hotlist[]>('/hotlists/');
     return response.data;
 };
 
 export const createHotlist = async (data: { plate_number: string; description: string; category: string }): Promise<Hotlist> => {
-    const response = await api.post<Hotlist>('/hotlists', data);
+    const response = await api.post<Hotlist>('/hotlists/', data);
     return response.data;
 };
 
 export const deleteHotlist = async (id: string): Promise<void> => {
-    await api.delete(`/hotlists/${id}`);
+    await api.delete(`/hotlists/${id}/`);
 };
 
 export interface ConvoyGroup {
@@ -74,7 +74,7 @@ export interface ConvoyGroup {
 }
 
 export const getConvoyAnalysis = async (plateNumber: string, timeWindowSeconds: number = 5): Promise<ConvoyGroup[]> => {
-    const response = await api.get<ConvoyGroup[]>('/analytics/convoy', {
+    const response = await api.get<ConvoyGroup[]>('/analytics/convoy/', {
         params: { plate_number: plateNumber, time_window_seconds: timeWindowSeconds }
     });
     return response.data;
@@ -87,7 +87,7 @@ export interface ODMatrixEntry {
 }
 
 export const getODMatrix = async (startDate?: string, endDate?: string): Promise<ODMatrixEntry[]> => {
-    const response = await api.get<ODMatrixEntry[]>('/analytics/od-matrix', {
+    const response = await api.get<ODMatrixEntry[]>('/analytics/od-matrix/', {
         params: { start_date: startDate, end_date: endDate }
     });
     return response.data;
