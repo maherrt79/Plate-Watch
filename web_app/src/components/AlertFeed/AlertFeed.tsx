@@ -20,17 +20,30 @@ const getCategoryColor = (category: string): string => {
     return '#C5C6C7'; // Default Grey
 };
 
+import { ENTRANCES } from '../Map/constants';
+
 const AlertFeed: React.FC = () => {
+    const [startDate, setStartDate] = React.useState('');
+    const [endDate, setEndDate] = React.useState('');
+    const [locationId, setLocationId] = React.useState('');
+
     // Fetch sightings every 2 seconds
     const { data: sightings } = useQuery({
-        queryKey: ['sightings', 'feed'],
-        queryFn: () => getSightings(),
+        queryKey: ['sightings', 'feed', startDate, endDate, locationId],
+        queryFn: () => getSightings({
+            startDate: startDate || undefined,
+            endDate: endDate || undefined,
+            locationId: locationId || undefined
+        }),
         refetchInterval: 2000,
     });
+
+    console.log('AlertFeed Debug:', { sightings });
 
     // Update alerts when new sightings arrive
     const alerts = React.useMemo(() => {
         if (!sightings) return [];
+        console.log('Processing sightings:', sightings.length);
 
 
         return sightings.slice(0, 20).map((sighting: Sighting) => {
@@ -72,6 +85,34 @@ const AlertFeed: React.FC = () => {
                     <span className="w-2 h-2 rounded-full bg-alert-critical animate-pulse"></span>
                     <span className="text-xs text-cool-grey font-mono">LIVE FEED</span>
                 </div>
+            </div>
+
+            {/* Filters */}
+            <div className="bg-void/30 p-2 border-b border-structure flex gap-2 flex-wrap">
+                <select
+                    value={locationId}
+                    onChange={(e) => setLocationId(e.target.value)}
+                    className="bg-void border border-structure text-cool-grey text-xs rounded p-1 outline-none focus:border-neon-cyan flex-1 min-w-[120px]"
+                >
+                    <option value="">All Locations</option>
+                    {Object.entries(ENTRANCES).map(([key, { label }]) => (
+                        <option key={key} value={key}>{label}</option>
+                    ))}
+                </select>
+                <input
+                    type="date"
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                    className="bg-void border border-structure text-cool-grey text-xs rounded p-1 outline-none focus:border-neon-cyan"
+                    placeholder="Start Date"
+                />
+                <input
+                    type="date"
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
+                    className="bg-void border border-structure text-cool-grey text-xs rounded p-1 outline-none focus:border-neon-cyan"
+                    placeholder="End Date"
+                />
             </div>
 
             {/* Feed List */}
