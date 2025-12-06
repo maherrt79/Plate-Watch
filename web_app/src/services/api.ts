@@ -42,7 +42,7 @@ export interface SightingStats {
 }
 
 export const getSightingStats = async (): Promise<SightingStats> => {
-    const response = await api.get<SightingStats>('/sightings/stats/');
+    const response = await api.get<SightingStats>('/sightings/stats');
     return response.data;
 };
 

@@ -2,9 +2,12 @@ locationId: "LOC-LOCAL-001"
 apiEndpoint: "http://localhost:8000/api/v1"
 apiKey: "dev-api-key-123"
 cameraSource: "test_video.mp4" # Path to local video file
+yoloModel: "yolov8n.pt"
+confidenceThreshold: 0.5
 storageDirectory: "./data/images"
 logDirectory: "./logs"
-simulationMode: true
+inputMode: "VIDEO" # Options: MOCK, VIDEO, WEBCAM
+webcamIndex: 0
 mockPlates:
   - "ABC-123"
   - "XYZ-789"

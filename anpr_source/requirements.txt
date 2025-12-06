@@ -1,0 +1,6 @@
+opencv-python
+numpy
+ultralytics
+paddlepaddle
+paddleocr==2.9.1
+lapx

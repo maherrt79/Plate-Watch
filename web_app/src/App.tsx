@@ -11,7 +11,7 @@ import theme from './theme';
 import { ToastProvider } from './contexts/ToastContext';
 import { useToast } from './contexts/ToastContextDefinition';
 import { setupInterceptors } from './services/api';
-
+import AlertsPage from './pages/AlertsPage';
 
 const queryClient = new QueryClient();
 
@@ -25,8 +25,6 @@ function Dashboard() {
     </>
   );
 }
-
-import AlertsPage from './pages/AlertsPage';
 
 function AppContent() {
   const { showToast } = useToast();
