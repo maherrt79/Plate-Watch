@@ -459,6 +459,9 @@ web\_app/
 │   │   │   ├── LocationFilter.tsx  
 │   │   │   ├── DateRangeFilter.tsx  
 │   │   │   └── FilterPanel.tsx  
+│   │   ├── map/
+│   │   │   ├── CityMap.tsx
+│   │   │   └── MapController.tsx  
 │   │   └── common/  
 │   │       ├── Pagination.tsx  
 │   │       ├── LoadingSpinner.tsx  
@@ -468,9 +471,9 @@ web\_app/
 │   │   ├── DashboardPage.tsx  
 │   │   └── PlateSearchPage.tsx  
 │   ├── services/  
-│   │   ├── api.ts                      \# Axios instance  
-│   │   ├── authService.ts              \# Login/logout  
-│   │   └── sightingsService.ts         \# Query sightings  
+│   │   ├── api.ts                      # Axios instance  
+│   │   ├── authService.ts              # Login/logout  
+│   │   └── sightingsService.ts         # Query sightings  
 │   ├── hooks/  
 │   │   ├── useAuth.ts  
 │   │   └── useSightings.ts  
@@ -484,65 +487,70 @@ web\_app/
 │   └── main.tsx  
 ├── public/  
 └── package.json  
-\`\`\`
+```
 
-**\#\#\#\# Key Components**
+#### Key Components
 
-\*\*PlateSearchPage\*\*  
-\`\`\`typescript  
-const PlateSearchPage: React.FC \= () \=\> {  
- const \[plateNumber, setPlateNumber\] \= useState('');  
- const { data, isLoading, error } \= useSightings({ plateNumber });  
+**PlateSearchPage**  
+```typescript  
+const PlateSearchPage: React.FC = () => {  
+ const [plateNumber, setPlateNumber] = useState('');  
+ const { data, isLoading, error } = useSightings({ plateNumber });  
   return (  
-   \<div\>  
-     \<PlateSearchInput  
-       value\={plateNumber}  
-       onChange\={setPlateNumber}  
-     /\>  
-     {isLoading && \<LoadingSpinner /\>}  
-     {error && \<ErrorMessage message\={error.message} /\>}  
-     {data && \<SightingsList sightings\={data.data} /\>}  
-   \</div\>  
+   <div>  
+     <PlateSearchInput  
+       value={plateNumber}  
+       onChange={setPlateNumber}  
+     />  
+     {isLoading && <LoadingSpinner />}  
+     {error && <ErrorMessage message={error.message} />}  
+     {data && <SightingsList sightings={data.data} />}  
+   </div>  
  );  
 };  
-\`\`\`
+```
 
-\*\*SightingsList\*\*  
-\`\`\`typescript  
+**SightingsList**  
+```typescript  
 interface SightingsListProps {  
- sightings: Sighting\[\];  
+ sightings: Sighting[];  
 }
 
-const SightingsList: React.FC\<SightingsListProps\> \= ({ sightings }) \=\> {  
+const SightingsList: React.FC<SightingsListProps> = ({ sightings }) => {  
  *// Sort by timestamp descending (newest first)*  
- const sortedSightings \= \[...sightings\].sort(  
-   (a, b) \=\> new Date(b.timestamp).getTime() \- new Date(a.timestamp).getTime()  
+ const sortedSightings = [...sightings].sort(  
+   (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()  
  );  
   return (  
-   \<div\>  
-     {sortedSightings.map(sighting \=\> (  
-       \<SightingCard key\={sighting.id} sighting\={sighting} /\>  
+   <div>  
+     {sortedSightings.map(sighting => (  
+       <SightingCard key={sighting.id} sighting={sighting} />  
      ))}  
-   \</div\>  
+   </div>  
  );  
 };  
-\`\`\`
+```
 
-**\#\# Data Models**
+**## Data Models**
 
-**\#\#\# Sighting Record**  
-\`\`\`typescript  
+**### Sighting Record**  
+```typescript  
 interface Sighting {  
- id: string;                    *// UUID*  
- plateNumber: string;           *// License plate text*  
- timestamp: string;             *// ISO 8601 datetime*  
- locationId: string;            *// Edge device location*  
- createdAt: string;             *// Server insertion time*  
+ id: string;                    // UUID  
+ plateNumber: string;           // License plate text  
+ timestamp: string;             // ISO 8601 datetime  
+ locationId: string;            // Edge device location  
+ createdAt: string;             // Server insertion time
+ vehicleMake?: string;          // MMC: Make
+ vehicleModel?: string;         // MMC: Model
+ vehicleColor?: string;         // MMC: Color
+ direction?: string;            // Direction of travel (e.g. "North", "South")
+ isHot?: boolean;               // Hotlist match flag
 }  
-\`\`\`
+```
 
-**\#\#\# User (Managed by AWS Cognito)**  
-\`\`\`typescript  
+**### User (Managed by AWS Cognito)**  
+```typescript  
 *// User data comes from AWS Cognito User Pool*  
 *// Accessed via Cognito JWT token claims*  
 interface CognitoUser {  

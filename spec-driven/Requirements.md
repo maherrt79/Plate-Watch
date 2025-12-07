@@ -31,23 +31,6 @@ The Plate-Watch system is an end-to-end vehicle monitoring solution that combine
 4\. THE Edge\_Device SHALL validate that the Location\_ID is non-empty before beginning video processing operations  
 5\. IF the Location\_ID is missing or invalid during initialization, THEN THE Edge\_Device SHALL log an error and refuse to start the AI\_Pipeline
 
-**\#\#\# Requirement 2: Real-Time Video Processing Pipeline**
-
-\*\*User Story:\*\* As an Edge Device operator, I want the system to continuously process video streams using AI models, so that vehicles can be detected and their plates read in real-time.
-
-**\#\#\#\# Acceptance Criteria**
-
-1\. THE Edge\_Device SHALL continuously capture frames from a connected camera device at a minimum rate of 10 frames per second  
-2\. THE Edge\_Device SHALL apply a vehicle detection model to each captured frame to identify vehicle bounding boxes  
-3\. WHEN a vehicle is detected in a frame, THE Edge\_Device SHALL apply an object tracking algorithm to assign or maintain a Tracker\_ID for that vehicle  
-4\. THE Edge\_Device SHALL apply the ANPR model to extract license plate text from the bounding box of each tracked vehicle  
-5\. THE Edge\_Device SHALL process the video stream without requiring manual intervention or frame-by-frame triggering
-
-**\#\#\# Requirement 3: Vehicle Tracking and De-duplication**
-
-\*\*User Story:\*\* As a data analyst, I want each vehicle to generate only one sighting record per pass through the camera view, so that my traffic counts and analytics are accurate.
-
-**\#\#\#\# Acceptance Criteria**
 
 1\. WHEN a new vehicle enters the video frame, THE Edge\_Device SHALL assign a unique Tracker\_ID to that vehicle  
 2\. WHEN the ANPR model successfully reads a license plate for a Tracker\_ID for the first time, THE Edge\_Device SHALL mark that Tracker\_ID as processed  
@@ -209,3 +192,17 @@ The Plate-Watch system is an end-to-end vehicle monitoring solution that combine
 3. THE Edge_Device SHALL be configurable to send data to a local API endpoint (e.g., `http://localhost:8000`) instead of AWS API Gateway.
 4. THE Cloud_Backend SHALL support a "local auth" mode that bypasses AWS Cognito and accepts a static development token or no authentication.
 5. THE Web_Application SHALL support a "local auth" mode to simulate user login without connecting to AWS Cognito.
+
+### Requirement 17: Interactive Map Dashboard
+
+**User Story:** As an operations manager, I want to visualize vehicle sightings on a map, so that I can understand spatial patterns, track vehicle movements, and identify hotspots.
+
+#### Acceptance Criteria
+
+1. THE Web_Application SHALL provide a Map Dashboard view displaying a map of the monitored area (e.g., Jableh).
+2. THE Web_Application SHALL display markers for vehicle sightings at their respective locations.
+3. THE Map Dashboard SHALL support an interactive Heatmap Layer to visualize sighting density.
+4. THE Web_Application SHALL display vehicle trajectory lines connecting sightings for a selected vehicle, sorted chronologically.
+5. THE Web_Application SHALL support interactive filtering where selecting a sighting in the list/table highlights the corresponding marker on the map and shows the vehicle's trajectory.
+6. THE Map Dashboard SHALL display visual alerts (e.g. pulsing markers) for sightings that match a Hotlist.
+

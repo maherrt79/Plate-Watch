@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Typography, Box, Paper, Grid, TextField, FormControlLabel, Switch, FormGroup } from '@mui/material';
 import CityMap from '../components/Map/CityMap';
@@ -13,6 +13,7 @@ const MapDashboard: React.FC = () => {
     const [categoryFilter, setCategoryFilter] = useState('All');
     const [showHeatmap, setShowHeatmap] = useState(false);
     const [showTrajectory, setShowTrajectory] = useState(true);
+    const recentAlertsRef = React.useRef<HTMLDivElement>(null);
 
     const { data: sightings = [] } = useQuery({
         queryKey: ['mapSightings', plateFilter, categoryFilter],
@@ -30,6 +31,19 @@ const MapDashboard: React.FC = () => {
     const handleSelectSighting = (sighting: Sighting) => {
         setSelectedSighting(sighting);
     };
+
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (recentAlertsRef.current && !recentAlertsRef.current.contains(event.target as Node)) {
+                setSelectedSighting(null);
+            }
+        }
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
     // No need for client-side filtering anymore
     const filteredSightings = sightings;
@@ -105,7 +119,7 @@ const MapDashboard: React.FC = () => {
                 </Grid>
 
                 {/* Alerts Side Table */}
-                <Grid size={{ xs: 12, md: 6 }}>
+                <Grid size={{ xs: 12, md: 6 }} ref={recentAlertsRef}>
                     <RecentAlerts
                         sightings={sightings}
                         onSelectSighting={handleSelectSighting}
