@@ -16,10 +16,19 @@ The project follows a "Local-First" development strategy, split into three major
     - Polish UI/UX and improve operational stability (Error handling, Fuzzy search).
     - **Status**: Mostly Completed.
 
-3.  **Phase 3: Cloud Migration** (Tasks 1-22)
-    - Migrate the validated local system to AWS infrastructure (ECS, RDS, S3, Cognito).
-    - Adapt "Local" implementations to "Cloud" requirements.
+3.  **Phase 3: Real Edge Device Deployment (Pilot)** (E1-E3)
+    - Deploy code to a physical Raspberry Pi.
+    - Connect Pi to Laptop via Tailscale ("Virtual Cable") for initial real-world testing.
     - **Status**: Pending.
+
+4.  **Phase 4: Local Server Migration** (D1-D4)
+    - Deploy the system on self-hosted hardware (Local Server).
+    - Establish secure production environment (Backups, Production Docker).
+    - **Status**: Pending.
+
+5.  **Phase 5: Future Cloud Migration** (Plan B)
+    - Optional migration to managed AWS options.
+    - **Status**: On Hold.
 
 ## Task List
 
@@ -113,7 +122,78 @@ The project follows a "Local-First" development strategy, split into three major
   - [x] A4.3 Global Error Handling (Axios Interceptors)
   - [x] A4.4 UI Layout Refinement (Centered AppBar & Content)
 
-### Phase 3: Cloud Migration (Original Tasks)
+### Phase 3: Real Edge Device Deployment (Pilot / Laptop)
+*Goal: Validate hardware and "Virtual Cable" connectivity using the Developer Laptop as the server.*
+
+- [ ] **E1. Edge Hardware Setup (Raspberry Pi)**
+  - [ ] E1.1 Flash **Raspberry Pi OS Lite (64-bit)**
+    - Use Raspberry Pi Imager
+    - *Advanced Options*: Set hostname (`plate-watch-edge-01`), Enable SSH, Set Username/Password, Configure WiFi
+  - [ ] E1.2 Initial Boot & Update
+    - SSH into device: `ssh user@plate-watch-edge-01.local`
+    - Update packages: `sudo apt update && sudo apt upgrade -y`
+  - [ ] E1.3 Install System Dependencies (OpenCV & PIP)
+    - Run: `sudo apt install -y python3-pip python3-venv libgl1 libglib2.0-0 libsm6 libxext6 libxrender-dev ffmpeg`
+
+- [ ] **E2. Code Deployment**
+  - [ ] E2.1 Clone Repository
+    - Generate SSH Key: `ssh-keygen -t ed25519`
+    - Add key to GitHub (or use HTTPS token)
+    - Clone to `~/plate-watch`
+  - [ ] E2.2 Python Environment
+    - Create venv: `python3 -m venv venv`
+    - Activate: `source venv/bin/activate`
+    - Install deps: `pip install -r requirements.txt` (Note: On Pi, some builds take time)
+  - [ ] E2.3 Configure Camera
+    - Identify Camera Index: `ls /dev/video*`
+    - Update `device_config.yaml`: Set `cameraSource` to index (usually `0`)
+  - [ ] E2.4 Setup Auto-Start Service
+    - Create systemd file: `/etc/systemd/system/plate-watch.service`
+    - Configure to run `main.py` on boot with restart policy
+
+- [ ] **E3. Connectivity Pilot (Tailscale)**
+  - [ ] E3.1 Laptop Setup (Server)
+    - Install Tailscale App
+    - Log in and note "Tailscale IP" (e.g., `100.x.y.z`) or Machine Name
+  - [ ] E3.2 Edge Setup (Client)
+    - Install: `curl -fsSL https://tailscale.com/install.sh | sh`
+    - Start: `sudo tailscale up`
+    - Authenticate via link
+  - [ ] E3.3 Update Application Config
+    - Edit `edge_device/config/device_config.yaml`
+    - Set `apiEndpoint: "http://<LAPTOP_TAILSCALE_IP>:8000"`
+  - [ ] E3.4 Verify End-to-End
+    - Start Backend on Laptop: `docker-compose up`
+    - Start Edge App on Pi: `python main.py`
+    - Verify sighting appears on Laptop Dashboard
+
+### Phase 4: Local Server Migration (Production)
+*Goal: Move the backend from the Laptop to a dedicated 24/7 Local Server.*
+See [DEPLOYMENT_STRATEGY.md](file:///Users/maher/Desktop/Plate-Watch/DEPLOYMENT_STRATEGY.md) for details.
+
+- [ ] **D1. Server Hardware Prep**
+  - [ ] D1.1 Provision Hardware/VM (Ubuntu Server)
+  - [ ] D1.2 Secure Docker Environment (Harden daemon, auto-restart policies)
+  - [ ] D1.3 Network Config (Static IPs, internal DNS)
+  - [ ] D1.4 Install **Tailscale** on Server (Advertise as new Backend)
+
+- [ ] **D2. Production Orchestration**
+  - [ ] D2.1 Create `docker-compose.prod.yml`
+    - Restart policies: `always` or `unless-stopped`
+    - Volume mapping for persistent data (DB & Images)
+  - [ ] D2.2 Environment Security (Secure `.env.prod`)
+
+- [ ] **D3. Operations & Redundancy**
+  - [ ] D3.1 Migrate Edge Config to point to Server Tailscale IP
+  - [ ] D3.2 Implement Backup Strategy (pg_dump script)
+
+- [ ] **D4. Hybrid Uplink (Optional)**
+  - [ ] D4.1 Setup simple "Heartbeat" monitoring
+
+### Phase 5: Future Cloud Migration (Plan B)
+*These tasks are preserved for potential future migration to AWS-native infrastructure.*
+
+*Original Tasks:*
 
 - [ ] 1. Set up Cloud Backend project structure and AWS infrastructure  
  - [ ] 1.1 Initialize FastAPI project structure  

@@ -115,6 +115,31 @@ To support rapid iteration and offline development, the system supports a fully 
 - **Storage**: Local filesystem for images instead of S3 (Edge already does this, but Web App will serve from local dev server or mock S3).
 - **Edge**: Runs as a script reading a video file, not a service on a Pi.
 
+### Local Private Cloud Architecture (Phase 1 Production)
+
+For the initial production deployment, the system runs on a dedicated local server (Local Private Cloud) alongside the Edge Devices. This provides data sovereignty, low latency, and zero cloud costs.
+
+```mermaid
+graph TD
+    subgraph "Local Private Network"
+        Edge[Edge Devices] -->|HTTP/POST| Gateway[Nginx Gateway]
+        Gateway --> API[FastAPI Container]
+        API --> DB[(PostgreSQL + TimescaleDB)]
+        API --> FS[Local File System (Images)]
+        Web[Web App Container] --> API
+        User[Local Operator] -->|Browser| Web
+    end
+```
+
+**Key Characteristics:**
+- **Infrastructure**: Self-hosted Docker orchestration on a dedicated server (e.g., Linux Server).
+- **Database**: PostgreSQL with TimescaleDB running in a local container.
+- **Storage**: Images stored on local RAID storage, served via Nginx or API.
+- **Authentication**: Local "Simulated Auth" or Lightweight Auth Service (keycloak/basic-auth) instead of AWS Cognito.
+- **Remote Access**: Secured via VPN (Tailscale/WireGuard) or Cloudflare Tunnel.
+
+See [DEPLOYMENT_STRATEGY.md](../DEPLOYMENT_STRATEGY.md) for detailed hardware specs and setup.
+
 ### AWS Cloud Architecture Overview
 
 The Plate-Watch system leverages AWS managed services for scalability, reliability, and security:
