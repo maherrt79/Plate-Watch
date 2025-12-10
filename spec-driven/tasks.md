@@ -109,6 +109,16 @@ The project follows a "Local-First" development strategy, split into three major
   - [x] A3.2 Heatmaps (Sighting density) (Integrated into Map Dashboard)
   - [x] A3.3 Convoy Analysis (Backend + Frontend Dashboard)
   - [x] A3.4 Origin-Destination Tracking (OD Matrix Visualization)
+  - [ ] **A3.5 Target Routine Analysis ("Best Time to Intercept")**
+    *Inspiration: Motorola Vigilant "Best Point of Contact"*
+    - [ ] Backend: Aggregation endpoint to group sightings by Day-of-Week and Hour-of-Day.
+    - [ ] Frontend: "Pattern of Life" Heatmap component (X-axis: Hour, Y-axis: Day).
+    - [ ] Frontend: "Next Predicted Appearance" calculator based on historical maximization.
+  - [ ] **A3.6 Location Profiling ("Stakeout Mode")**
+    *Inspiration: Motorola Vigilant "Stakeout"*
+    - [ ] Frontend: Clickable Camera Markers on Map to open "Location Profile".
+    - [ ] Backend: Endpoint to fetch "Dwell Time Distribution" and "Peak Activity Hours" for a specific location.
+    - [ ] Frontend: "Frequent Visitors" list for a specific location (Top 10 recurring plates).
 
 ## Codebase Improvements
 - [x] Phase 1: Configuration Management (Env Vars)
