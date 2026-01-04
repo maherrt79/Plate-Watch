@@ -1,5 +1,5 @@
 locationId: "LOC-LOCAL-001"
-apiEndpoint: "http://localhost:8000/api/v1"
+apiEndpoint: "http://100.121.199.65:8000/api/v1"
 apiKey: "dev-api-key-123"
 cameraSource: "test_video.mp4" # Path to local video file
 yoloModel: "yolov8n.pt"

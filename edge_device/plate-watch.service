@@ -1,0 +1,14 @@
+[Unit]
+Description=Plate Watch Edge Service
+After=network.target
+
+[Service]
+User=maherrt
+WorkingDirectory=/home/maherrt/plate-watch
+ExecStart=/home/maherrt/plate-watch/venv/bin/python main.py
+Restart=always
+RestartSec=5
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target

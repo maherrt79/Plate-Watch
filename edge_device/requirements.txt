@@ -1,10 +1,6 @@
 ultralytics
-easyocr
 requests
-opencv-python-headless
 pyyaml
 paddlepaddle
 paddleocr==2.9.1
 lapx
-opencv-python-headless
-pyyaml
